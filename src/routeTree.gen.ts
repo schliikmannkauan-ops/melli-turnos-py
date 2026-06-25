@@ -9,38 +9,210 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppTurnosRouteImport } from './routes/_app.turnos'
+import { Route as AppSolicitudesRouteImport } from './routes/_app.solicitudes'
+import { Route as AppPerfilRouteImport } from './routes/_app.perfil'
+import { Route as AppNotificacionesRouteImport } from './routes/_app.notificaciones'
+import { Route as AppInicioRouteImport } from './routes/_app.inicio'
+import { Route as AppHistorialRouteImport } from './routes/_app.historial'
+import { Route as AppDisponibilidadRouteImport } from './routes/_app.disponibilidad'
+import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppAgendarRouteImport } from './routes/_app.agendar'
+import { Route as AppAgendaRouteImport } from './routes/_app.agenda'
+import { Route as ApiPublicHooksRemindersRouteImport } from './routes/api/public/hooks/reminders'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTurnosRoute = AppTurnosRouteImport.update({
+  id: '/turnos',
+  path: '/turnos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSolicitudesRoute = AppSolicitudesRouteImport.update({
+  id: '/solicitudes',
+  path: '/solicitudes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPerfilRoute = AppPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificacionesRoute = AppNotificacionesRouteImport.update({
+  id: '/notificaciones',
+  path: '/notificaciones',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInicioRoute = AppInicioRouteImport.update({
+  id: '/inicio',
+  path: '/inicio',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHistorialRoute = AppHistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDisponibilidadRoute = AppDisponibilidadRouteImport.update({
+  id: '/disponibilidad',
+  path: '/disponibilidad',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAgendarRoute = AppAgendarRouteImport.update({
+  id: '/agendar',
+  path: '/agendar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAgendaRoute = AppAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => AppRoute,
+} as any)
+const ApiPublicHooksRemindersRoute = ApiPublicHooksRemindersRouteImport.update({
+  id: '/api/public/hooks/reminders',
+  path: '/api/public/hooks/reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/agenda': typeof AppAgendaRoute
+  '/agendar': typeof AppAgendarRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/disponibilidad': typeof AppDisponibilidadRoute
+  '/historial': typeof AppHistorialRoute
+  '/inicio': typeof AppInicioRoute
+  '/notificaciones': typeof AppNotificacionesRoute
+  '/perfil': typeof AppPerfilRoute
+  '/solicitudes': typeof AppSolicitudesRoute
+  '/turnos': typeof AppTurnosRoute
+  '/api/public/hooks/reminders': typeof ApiPublicHooksRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/agenda': typeof AppAgendaRoute
+  '/agendar': typeof AppAgendarRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/disponibilidad': typeof AppDisponibilidadRoute
+  '/historial': typeof AppHistorialRoute
+  '/inicio': typeof AppInicioRoute
+  '/notificaciones': typeof AppNotificacionesRoute
+  '/perfil': typeof AppPerfilRoute
+  '/solicitudes': typeof AppSolicitudesRoute
+  '/turnos': typeof AppTurnosRoute
+  '/api/public/hooks/reminders': typeof ApiPublicHooksRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_app/agenda': typeof AppAgendaRoute
+  '/_app/agendar': typeof AppAgendarRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/disponibilidad': typeof AppDisponibilidadRoute
+  '/_app/historial': typeof AppHistorialRoute
+  '/_app/inicio': typeof AppInicioRoute
+  '/_app/notificaciones': typeof AppNotificacionesRoute
+  '/_app/perfil': typeof AppPerfilRoute
+  '/_app/solicitudes': typeof AppSolicitudesRoute
+  '/_app/turnos': typeof AppTurnosRoute
+  '/api/public/hooks/reminders': typeof ApiPublicHooksRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/agenda'
+    | '/agendar'
+    | '/dashboard'
+    | '/disponibilidad'
+    | '/historial'
+    | '/inicio'
+    | '/notificaciones'
+    | '/perfil'
+    | '/solicitudes'
+    | '/turnos'
+    | '/api/public/hooks/reminders'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/agenda'
+    | '/agendar'
+    | '/dashboard'
+    | '/disponibilidad'
+    | '/historial'
+    | '/inicio'
+    | '/notificaciones'
+    | '/perfil'
+    | '/solicitudes'
+    | '/turnos'
+    | '/api/public/hooks/reminders'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/auth'
+    | '/_app/agenda'
+    | '/_app/agendar'
+    | '/_app/dashboard'
+    | '/_app/disponibilidad'
+    | '/_app/historial'
+    | '/_app/inicio'
+    | '/_app/notificaciones'
+    | '/_app/perfil'
+    | '/_app/solicitudes'
+    | '/_app/turnos'
+    | '/api/public/hooks/reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ApiPublicHooksRemindersRoute: typeof ApiPublicHooksRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +220,120 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/turnos': {
+      id: '/_app/turnos'
+      path: '/turnos'
+      fullPath: '/turnos'
+      preLoaderRoute: typeof AppTurnosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/solicitudes': {
+      id: '/_app/solicitudes'
+      path: '/solicitudes'
+      fullPath: '/solicitudes'
+      preLoaderRoute: typeof AppSolicitudesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/perfil': {
+      id: '/_app/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AppPerfilRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notificaciones': {
+      id: '/_app/notificaciones'
+      path: '/notificaciones'
+      fullPath: '/notificaciones'
+      preLoaderRoute: typeof AppNotificacionesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inicio': {
+      id: '/_app/inicio'
+      path: '/inicio'
+      fullPath: '/inicio'
+      preLoaderRoute: typeof AppInicioRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/historial': {
+      id: '/_app/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof AppHistorialRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/disponibilidad': {
+      id: '/_app/disponibilidad'
+      path: '/disponibilidad'
+      fullPath: '/disponibilidad'
+      preLoaderRoute: typeof AppDisponibilidadRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/agendar': {
+      id: '/_app/agendar'
+      path: '/agendar'
+      fullPath: '/agendar'
+      preLoaderRoute: typeof AppAgendarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/agenda': {
+      id: '/_app/agenda'
+      path: '/agenda'
+      fullPath: '/agenda'
+      preLoaderRoute: typeof AppAgendaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/api/public/hooks/reminders': {
+      id: '/api/public/hooks/reminders'
+      path: '/api/public/hooks/reminders'
+      fullPath: '/api/public/hooks/reminders'
+      preLoaderRoute: typeof ApiPublicHooksRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAgendaRoute: typeof AppAgendaRoute
+  AppAgendarRoute: typeof AppAgendarRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDisponibilidadRoute: typeof AppDisponibilidadRoute
+  AppHistorialRoute: typeof AppHistorialRoute
+  AppInicioRoute: typeof AppInicioRoute
+  AppNotificacionesRoute: typeof AppNotificacionesRoute
+  AppPerfilRoute: typeof AppPerfilRoute
+  AppSolicitudesRoute: typeof AppSolicitudesRoute
+  AppTurnosRoute: typeof AppTurnosRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAgendaRoute: AppAgendaRoute,
+  AppAgendarRoute: AppAgendarRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppDisponibilidadRoute: AppDisponibilidadRoute,
+  AppHistorialRoute: AppHistorialRoute,
+  AppInicioRoute: AppInicioRoute,
+  AppNotificacionesRoute: AppNotificacionesRoute,
+  AppPerfilRoute: AppPerfilRoute,
+  AppSolicitudesRoute: AppSolicitudesRoute,
+  AppTurnosRoute: AppTurnosRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ApiPublicHooksRemindersRoute: ApiPublicHooksRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
