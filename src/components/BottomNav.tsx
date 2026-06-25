@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Calendar, Plus, Clock, Bell, LayoutDashboard, Inbox, CalendarDays, Settings } from "lucide-react";
+import { Home, Calendar, Plus, Clock, Bell, LayoutDashboard, Inbox, CalendarDays, Settings, Users, BarChart3, Building2 } from "lucide-react";
 import type { AppRole } from "@/hooks/use-auth";
 
 const clientItems = [
@@ -17,8 +17,15 @@ const barberItems = [
   { to: "/disponibilidad", label: "Horario", icon: Settings },
 ] as const;
 
+const ownerItems = [
+  { to: "/dashboard", label: "Inicio", icon: LayoutDashboard },
+  { to: "/sucursales", label: "Sucursales", icon: Building2 },
+  { to: "/barberos", label: "Barberos", icon: Users },
+  { to: "/estadisticas", label: "Stats", icon: BarChart3 },
+] as const;
+
 export function BottomNav({ role }: { role: AppRole }) {
-  const items = role === "cliente" ? clientItems : barberItems;
+  const items = role === "cliente" ? clientItems : role === "dueno" ? ownerItems : barberItems;
   const loc = useLocation();
 
   return (
