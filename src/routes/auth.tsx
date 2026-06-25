@@ -26,7 +26,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { mode } = Route.useSearch();
   const navigate = useNavigate();
-  const { session, role, refresh } = useAuth();
+  const { session, role, refresh, signOut } = useAuth();
   const [isRegister, setIsRegister] = useState(mode === "register");
   const [loading, setLoading] = useState(false);
   const [seeding, setSeeding] = useState(false);
@@ -37,14 +37,8 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
 
-  useEffect(() => {
-    if (session && role) {
-      navigate({
-        to: role === "cliente" ? "/inicio" : "/dashboard",
-        replace: true,
-      });
-    }
-  }, [session, role, navigate]);
+  // Note: no auto-redirect when already signed in. Show a panel instead so the user
+  // can either continue to their dashboard or sign out to use a different account.
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
