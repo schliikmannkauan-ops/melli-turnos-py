@@ -13,11 +13,15 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppTurnosRouteImport } from './routes/_app.turnos'
+import { Route as AppSolicitudesRouteImport } from './routes/_app.solicitudes'
 import { Route as AppPerfilRouteImport } from './routes/_app.perfil'
 import { Route as AppNotificacionesRouteImport } from './routes/_app.notificaciones'
 import { Route as AppInicioRouteImport } from './routes/_app.inicio'
 import { Route as AppHistorialRouteImport } from './routes/_app.historial'
+import { Route as AppDisponibilidadRouteImport } from './routes/_app.disponibilidad'
+import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppAgendarRouteImport } from './routes/_app.agendar'
+import { Route as AppAgendaRouteImport } from './routes/_app.agenda'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -36,6 +40,11 @@ const IndexRoute = IndexRouteImport.update({
 const AppTurnosRoute = AppTurnosRouteImport.update({
   id: '/turnos',
   path: '/turnos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSolicitudesRoute = AppSolicitudesRouteImport.update({
+  id: '/solicitudes',
+  path: '/solicitudes',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPerfilRoute = AppPerfilRouteImport.update({
@@ -58,30 +67,53 @@ const AppHistorialRoute = AppHistorialRouteImport.update({
   path: '/historial',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDisponibilidadRoute = AppDisponibilidadRouteImport.update({
+  id: '/disponibilidad',
+  path: '/disponibilidad',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAgendarRoute = AppAgendarRouteImport.update({
   id: '/agendar',
   path: '/agendar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAgendaRoute = AppAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
   getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/agenda': typeof AppAgendaRoute
   '/agendar': typeof AppAgendarRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/disponibilidad': typeof AppDisponibilidadRoute
   '/historial': typeof AppHistorialRoute
   '/inicio': typeof AppInicioRoute
   '/notificaciones': typeof AppNotificacionesRoute
   '/perfil': typeof AppPerfilRoute
+  '/solicitudes': typeof AppSolicitudesRoute
   '/turnos': typeof AppTurnosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/agenda': typeof AppAgendaRoute
   '/agendar': typeof AppAgendarRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/disponibilidad': typeof AppDisponibilidadRoute
   '/historial': typeof AppHistorialRoute
   '/inicio': typeof AppInicioRoute
   '/notificaciones': typeof AppNotificacionesRoute
   '/perfil': typeof AppPerfilRoute
+  '/solicitudes': typeof AppSolicitudesRoute
   '/turnos': typeof AppTurnosRoute
 }
 export interface FileRoutesById {
@@ -89,11 +121,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_app/agenda': typeof AppAgendaRoute
   '/_app/agendar': typeof AppAgendarRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/disponibilidad': typeof AppDisponibilidadRoute
   '/_app/historial': typeof AppHistorialRoute
   '/_app/inicio': typeof AppInicioRoute
   '/_app/notificaciones': typeof AppNotificacionesRoute
   '/_app/perfil': typeof AppPerfilRoute
+  '/_app/solicitudes': typeof AppSolicitudesRoute
   '/_app/turnos': typeof AppTurnosRoute
 }
 export interface FileRouteTypes {
@@ -101,32 +137,44 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/agenda'
     | '/agendar'
+    | '/dashboard'
+    | '/disponibilidad'
     | '/historial'
     | '/inicio'
     | '/notificaciones'
     | '/perfil'
+    | '/solicitudes'
     | '/turnos'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/agenda'
     | '/agendar'
+    | '/dashboard'
+    | '/disponibilidad'
     | '/historial'
     | '/inicio'
     | '/notificaciones'
     | '/perfil'
+    | '/solicitudes'
     | '/turnos'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/auth'
+    | '/_app/agenda'
     | '/_app/agendar'
+    | '/_app/dashboard'
+    | '/_app/disponibilidad'
     | '/_app/historial'
     | '/_app/inicio'
     | '/_app/notificaciones'
     | '/_app/perfil'
+    | '/_app/solicitudes'
     | '/_app/turnos'
   fileRoutesById: FileRoutesById
 }
@@ -166,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTurnosRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/solicitudes': {
+      id: '/_app/solicitudes'
+      path: '/solicitudes'
+      fullPath: '/solicitudes'
+      preLoaderRoute: typeof AppSolicitudesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/perfil': {
       id: '/_app/perfil'
       path: '/perfil'
@@ -194,6 +249,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHistorialRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/disponibilidad': {
+      id: '/_app/disponibilidad'
+      path: '/disponibilidad'
+      fullPath: '/disponibilidad'
+      preLoaderRoute: typeof AppDisponibilidadRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/agendar': {
       id: '/_app/agendar'
       path: '/agendar'
@@ -201,24 +270,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAgendarRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/agenda': {
+      id: '/_app/agenda'
+      path: '/agenda'
+      fullPath: '/agenda'
+      preLoaderRoute: typeof AppAgendaRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppAgendaRoute: typeof AppAgendaRoute
   AppAgendarRoute: typeof AppAgendarRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDisponibilidadRoute: typeof AppDisponibilidadRoute
   AppHistorialRoute: typeof AppHistorialRoute
   AppInicioRoute: typeof AppInicioRoute
   AppNotificacionesRoute: typeof AppNotificacionesRoute
   AppPerfilRoute: typeof AppPerfilRoute
+  AppSolicitudesRoute: typeof AppSolicitudesRoute
   AppTurnosRoute: typeof AppTurnosRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAgendaRoute: AppAgendaRoute,
   AppAgendarRoute: AppAgendarRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppDisponibilidadRoute: AppDisponibilidadRoute,
   AppHistorialRoute: AppHistorialRoute,
   AppInicioRoute: AppInicioRoute,
   AppNotificacionesRoute: AppNotificacionesRoute,
   AppPerfilRoute: AppPerfilRoute,
+  AppSolicitudesRoute: AppSolicitudesRoute,
   AppTurnosRoute: AppTurnosRoute,
 }
 
