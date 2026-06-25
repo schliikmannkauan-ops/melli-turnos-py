@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Calendar, Plus, Clock, Bell, LayoutDashboard, Inbox, CalendarDays, Settings, Users, BarChart3, Building2 } from "lucide-react";
+import { Home, Calendar, Plus, Clock, LayoutDashboard, Inbox, CalendarDays, Settings, Users, BarChart3, Building2, UserCog } from "lucide-react";
 import type { AppRole } from "@/hooks/use-auth";
 
 const clientItems = [
@@ -7,7 +7,7 @@ const clientItems = [
   { to: "/turnos", label: "Turnos", icon: Calendar },
   { to: "/agendar", label: "Agendar", icon: Plus, primary: true },
   { to: "/historial", label: "Historial", icon: Clock },
-  { to: "/notificaciones", label: "Avisos", icon: Bell },
+  { to: "/perfil", label: "Config", icon: UserCog },
 ] as const;
 
 const barberItems = [
@@ -15,6 +15,7 @@ const barberItems = [
   { to: "/solicitudes", label: "Solicitudes", icon: Inbox },
   { to: "/agenda", label: "Agenda", icon: CalendarDays },
   { to: "/disponibilidad", label: "Horario", icon: Settings },
+  { to: "/perfil", label: "Config", icon: UserCog },
 ] as const;
 
 const ownerItems = [
@@ -22,6 +23,7 @@ const ownerItems = [
   { to: "/sucursales", label: "Sucursales", icon: Building2 },
   { to: "/barberos", label: "Barberos", icon: Users },
   { to: "/estadisticas", label: "Stats", icon: BarChart3 },
+  { to: "/perfil", label: "Config", icon: UserCog },
 ] as const;
 
 export function BottomNav({ role }: { role: AppRole }) {
