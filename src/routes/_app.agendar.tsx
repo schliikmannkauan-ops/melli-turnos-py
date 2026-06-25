@@ -139,8 +139,8 @@ function AgendarPage() {
       if (!assignedBarberId) throw new Error("No hay barbero disponible");
 
       const [hh, mm] = time.split(":").map(Number);
-      const scheduled = new Date(date);
-      scheduled.setHours(hh, mm, 0, 0);
+      const [yy, mo, dd] = date.split("-").map(Number);
+      const scheduled = new Date(yy, mo - 1, dd, hh, mm, 0, 0);
 
       let photoUrl: string | null = null;
       if (photoFile) {
