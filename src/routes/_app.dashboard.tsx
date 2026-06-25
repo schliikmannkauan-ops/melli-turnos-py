@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { AppShell } from "@/components/AppShell";
 import { Card } from "@/components/ui/card";
 import { formatTime, formatGs } from "@/lib/format";
-import { Inbox, Scissors, Users, Building2, CalendarCheck, Clock } from "lucide-react";
+import { Inbox, Scissors, Users, Building2, CalendarCheck, Clock, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/_app/dashboard")({
   ssr: false,
@@ -234,7 +234,7 @@ function OwnerDash() {
           <span className="text-xs text-muted-foreground">→</span>
         </Card></Link>
         <Link to="/estadisticas"><Card className="p-4 flex items-center gap-3 hover:border-brand transition">
-          <span className="text-ink"><svg /></span>
+          <BarChart3 className="size-5 text-ink" />
           <p className="flex-1 font-medium">Ver estadísticas</p>
           <span className="text-xs text-muted-foreground">→</span>
         </Card></Link>
