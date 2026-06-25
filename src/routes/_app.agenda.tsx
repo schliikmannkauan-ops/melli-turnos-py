@@ -41,7 +41,7 @@ function Agenda() {
       const { data } = await supabase
         .from("appointments")
         .select(
-          "id, scheduled_at, duration_minutes, status, description, services(name), profiles:profiles!appointments_client_id_fkey(name)",
+          "id, scheduled_at, duration_minutes, status, description, services(name), profiles:profiles!appointments_client_id_profiles_fkey(name)",
         )
         .eq("barber_id", barber!.id)
         .eq("status", "confirmado")

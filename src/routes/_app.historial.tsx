@@ -20,7 +20,7 @@ function Historial() {
       const { data } = await supabase
         .from("appointments")
         .select(
-          "id, scheduled_at, description, reference_photo_url, services(name, price_gs), barbers(profiles:profiles!barbers_user_id_fkey(name))",
+          "id, scheduled_at, description, reference_photo_url, services(name, price_gs), barbers(profiles:profiles!barbers_user_id_profiles_fkey(name))",
         )
         .eq("client_id", user!.id)
         .eq("status", "completado")

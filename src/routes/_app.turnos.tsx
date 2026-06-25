@@ -33,7 +33,7 @@ function MisTurnos() {
       const { data } = await supabase
         .from("appointments")
         .select(
-          "id, scheduled_at, status, duration_minutes, description, reference_photo_url, services(name, price_gs), locations(name), barbers(profiles:profiles!barbers_user_id_fkey(name))",
+          "id, scheduled_at, status, duration_minutes, description, reference_photo_url, services(name, price_gs), locations(name), barbers(profiles:profiles!barbers_user_id_profiles_fkey(name))",
         )
         .eq("client_id", user!.id)
         .order("scheduled_at", { ascending: false });

@@ -33,7 +33,7 @@ function Solicitudes() {
       const { data } = await supabase
         .from("appointments")
         .select(
-          "id, scheduled_at, description, reference_photo_url, services(name), profiles:profiles!appointments_client_id_fkey(name, avatar_url, phone)",
+          "id, scheduled_at, description, reference_photo_url, services(name), profiles:profiles!appointments_client_id_profiles_fkey(name, avatar_url, phone)",
         )
         .eq("barber_id", barber!.id)
         .eq("status", "pendiente")

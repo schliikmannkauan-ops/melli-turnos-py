@@ -31,7 +31,7 @@ function HomeCliente() {
     queryFn: async () => {
       const { data } = await supabase
         .from("appointments")
-        .select("id, scheduled_at, status, services(name), locations(name), barbers(profiles:profiles!barbers_user_id_fkey(name))")
+        .select("id, scheduled_at, status, services(name), locations(name), barbers(profiles:profiles!barbers_user_id_profiles_fkey(name))")
         .eq("client_id", user!.id)
         .in("status", ["confirmado", "pendiente"])
         .gte("scheduled_at", new Date().toISOString())

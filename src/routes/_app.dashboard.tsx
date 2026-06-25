@@ -56,7 +56,7 @@ function BarberDash() {
     queryFn: async () => {
       const { data } = await supabase
         .from("appointments")
-        .select("id, scheduled_at, services(name), profiles:profiles!appointments_client_id_fkey(name)")
+        .select("id, scheduled_at, services(name), profiles:profiles!appointments_client_id_profiles_fkey(name)")
         .eq("barber_id", barber!.id)
         .eq("status", "confirmado")
         .gte("scheduled_at", start.toISOString())

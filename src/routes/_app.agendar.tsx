@@ -48,7 +48,7 @@ function AgendarPage() {
       if (!locationId) return [];
       const { data } = await supabase
         .from("barbers")
-        .select("id, user_id, photo_url, bio, profiles:profiles!barbers_user_id_fkey(name)")
+        .select("id, user_id, photo_url, bio, profiles:profiles!barbers_user_id_profiles_fkey(name)")
         .eq("location_id", locationId)
         .eq("is_active", true);
       return data ?? [];
