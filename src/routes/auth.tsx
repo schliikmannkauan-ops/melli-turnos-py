@@ -77,7 +77,7 @@ function AuthPage() {
   async function fillDemo(em: string) {
     setSeeding(true);
     try {
-      await seed({});
+      await seed();
       setEmail(em);
       setPassword("demo1234");
       setIsRegister(false);
