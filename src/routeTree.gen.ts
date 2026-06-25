@@ -9,38 +9,149 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppTurnosRouteImport } from './routes/_app.turnos'
+import { Route as AppPerfilRouteImport } from './routes/_app.perfil'
+import { Route as AppNotificacionesRouteImport } from './routes/_app.notificaciones'
+import { Route as AppInicioRouteImport } from './routes/_app.inicio'
+import { Route as AppHistorialRouteImport } from './routes/_app.historial'
+import { Route as AppAgendarRouteImport } from './routes/_app.agendar'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppTurnosRoute = AppTurnosRouteImport.update({
+  id: '/turnos',
+  path: '/turnos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPerfilRoute = AppPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificacionesRoute = AppNotificacionesRouteImport.update({
+  id: '/notificaciones',
+  path: '/notificaciones',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInicioRoute = AppInicioRouteImport.update({
+  id: '/inicio',
+  path: '/inicio',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHistorialRoute = AppHistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAgendarRoute = AppAgendarRouteImport.update({
+  id: '/agendar',
+  path: '/agendar',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/agendar': typeof AppAgendarRoute
+  '/historial': typeof AppHistorialRoute
+  '/inicio': typeof AppInicioRoute
+  '/notificaciones': typeof AppNotificacionesRoute
+  '/perfil': typeof AppPerfilRoute
+  '/turnos': typeof AppTurnosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/agendar': typeof AppAgendarRoute
+  '/historial': typeof AppHistorialRoute
+  '/inicio': typeof AppInicioRoute
+  '/notificaciones': typeof AppNotificacionesRoute
+  '/perfil': typeof AppPerfilRoute
+  '/turnos': typeof AppTurnosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_app/agendar': typeof AppAgendarRoute
+  '/_app/historial': typeof AppHistorialRoute
+  '/_app/inicio': typeof AppInicioRoute
+  '/_app/notificaciones': typeof AppNotificacionesRoute
+  '/_app/perfil': typeof AppPerfilRoute
+  '/_app/turnos': typeof AppTurnosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/agendar'
+    | '/historial'
+    | '/inicio'
+    | '/notificaciones'
+    | '/perfil'
+    | '/turnos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/agendar'
+    | '/historial'
+    | '/inicio'
+    | '/notificaciones'
+    | '/perfil'
+    | '/turnos'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/auth'
+    | '/_app/agendar'
+    | '/_app/historial'
+    | '/_app/inicio'
+    | '/_app/notificaciones'
+    | '/_app/perfil'
+    | '/_app/turnos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +159,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/turnos': {
+      id: '/_app/turnos'
+      path: '/turnos'
+      fullPath: '/turnos'
+      preLoaderRoute: typeof AppTurnosRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/perfil': {
+      id: '/_app/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AppPerfilRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notificaciones': {
+      id: '/_app/notificaciones'
+      path: '/notificaciones'
+      fullPath: '/notificaciones'
+      preLoaderRoute: typeof AppNotificacionesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/inicio': {
+      id: '/_app/inicio'
+      path: '/inicio'
+      fullPath: '/inicio'
+      preLoaderRoute: typeof AppInicioRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/historial': {
+      id: '/_app/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof AppHistorialRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/agendar': {
+      id: '/_app/agendar'
+      path: '/agendar'
+      fullPath: '/agendar'
+      preLoaderRoute: typeof AppAgendarRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAgendarRoute: typeof AppAgendarRoute
+  AppHistorialRoute: typeof AppHistorialRoute
+  AppInicioRoute: typeof AppInicioRoute
+  AppNotificacionesRoute: typeof AppNotificacionesRoute
+  AppPerfilRoute: typeof AppPerfilRoute
+  AppTurnosRoute: typeof AppTurnosRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAgendarRoute: AppAgendarRoute,
+  AppHistorialRoute: AppHistorialRoute,
+  AppInicioRoute: AppInicioRoute,
+  AppNotificacionesRoute: AppNotificacionesRoute,
+  AppPerfilRoute: AppPerfilRoute,
+  AppTurnosRoute: AppTurnosRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
