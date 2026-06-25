@@ -13,13 +13,16 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppTurnosRouteImport } from './routes/_app.turnos'
+import { Route as AppSucursalesRouteImport } from './routes/_app.sucursales'
 import { Route as AppSolicitudesRouteImport } from './routes/_app.solicitudes'
 import { Route as AppPerfilRouteImport } from './routes/_app.perfil'
 import { Route as AppNotificacionesRouteImport } from './routes/_app.notificaciones'
 import { Route as AppInicioRouteImport } from './routes/_app.inicio'
 import { Route as AppHistorialRouteImport } from './routes/_app.historial'
+import { Route as AppEstadisticasRouteImport } from './routes/_app.estadisticas'
 import { Route as AppDisponibilidadRouteImport } from './routes/_app.disponibilidad'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppBarberosRouteImport } from './routes/_app.barberos'
 import { Route as AppAgendarRouteImport } from './routes/_app.agendar'
 import { Route as AppAgendaRouteImport } from './routes/_app.agenda'
 import { Route as ApiPublicHooksRemindersRouteImport } from './routes/api/public/hooks/reminders'
@@ -41,6 +44,11 @@ const IndexRoute = IndexRouteImport.update({
 const AppTurnosRoute = AppTurnosRouteImport.update({
   id: '/turnos',
   path: '/turnos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSucursalesRoute = AppSucursalesRouteImport.update({
+  id: '/sucursales',
+  path: '/sucursales',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSolicitudesRoute = AppSolicitudesRouteImport.update({
@@ -68,6 +76,11 @@ const AppHistorialRoute = AppHistorialRouteImport.update({
   path: '/historial',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEstadisticasRoute = AppEstadisticasRouteImport.update({
+  id: '/estadisticas',
+  path: '/estadisticas',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDisponibilidadRoute = AppDisponibilidadRouteImport.update({
   id: '/disponibilidad',
   path: '/disponibilidad',
@@ -76,6 +89,11 @@ const AppDisponibilidadRoute = AppDisponibilidadRouteImport.update({
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBarberosRoute = AppBarberosRouteImport.update({
+  id: '/barberos',
+  path: '/barberos',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAgendarRoute = AppAgendarRouteImport.update({
@@ -99,13 +117,16 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/agenda': typeof AppAgendaRoute
   '/agendar': typeof AppAgendarRoute
+  '/barberos': typeof AppBarberosRoute
   '/dashboard': typeof AppDashboardRoute
   '/disponibilidad': typeof AppDisponibilidadRoute
+  '/estadisticas': typeof AppEstadisticasRoute
   '/historial': typeof AppHistorialRoute
   '/inicio': typeof AppInicioRoute
   '/notificaciones': typeof AppNotificacionesRoute
   '/perfil': typeof AppPerfilRoute
   '/solicitudes': typeof AppSolicitudesRoute
+  '/sucursales': typeof AppSucursalesRoute
   '/turnos': typeof AppTurnosRoute
   '/api/public/hooks/reminders': typeof ApiPublicHooksRemindersRoute
 }
@@ -114,13 +135,16 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/agenda': typeof AppAgendaRoute
   '/agendar': typeof AppAgendarRoute
+  '/barberos': typeof AppBarberosRoute
   '/dashboard': typeof AppDashboardRoute
   '/disponibilidad': typeof AppDisponibilidadRoute
+  '/estadisticas': typeof AppEstadisticasRoute
   '/historial': typeof AppHistorialRoute
   '/inicio': typeof AppInicioRoute
   '/notificaciones': typeof AppNotificacionesRoute
   '/perfil': typeof AppPerfilRoute
   '/solicitudes': typeof AppSolicitudesRoute
+  '/sucursales': typeof AppSucursalesRoute
   '/turnos': typeof AppTurnosRoute
   '/api/public/hooks/reminders': typeof ApiPublicHooksRemindersRoute
 }
@@ -131,13 +155,16 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_app/agenda': typeof AppAgendaRoute
   '/_app/agendar': typeof AppAgendarRoute
+  '/_app/barberos': typeof AppBarberosRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/disponibilidad': typeof AppDisponibilidadRoute
+  '/_app/estadisticas': typeof AppEstadisticasRoute
   '/_app/historial': typeof AppHistorialRoute
   '/_app/inicio': typeof AppInicioRoute
   '/_app/notificaciones': typeof AppNotificacionesRoute
   '/_app/perfil': typeof AppPerfilRoute
   '/_app/solicitudes': typeof AppSolicitudesRoute
+  '/_app/sucursales': typeof AppSucursalesRoute
   '/_app/turnos': typeof AppTurnosRoute
   '/api/public/hooks/reminders': typeof ApiPublicHooksRemindersRoute
 }
@@ -148,13 +175,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/agenda'
     | '/agendar'
+    | '/barberos'
     | '/dashboard'
     | '/disponibilidad'
+    | '/estadisticas'
     | '/historial'
     | '/inicio'
     | '/notificaciones'
     | '/perfil'
     | '/solicitudes'
+    | '/sucursales'
     | '/turnos'
     | '/api/public/hooks/reminders'
   fileRoutesByTo: FileRoutesByTo
@@ -163,13 +193,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/agenda'
     | '/agendar'
+    | '/barberos'
     | '/dashboard'
     | '/disponibilidad'
+    | '/estadisticas'
     | '/historial'
     | '/inicio'
     | '/notificaciones'
     | '/perfil'
     | '/solicitudes'
+    | '/sucursales'
     | '/turnos'
     | '/api/public/hooks/reminders'
   id:
@@ -179,13 +212,16 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_app/agenda'
     | '/_app/agendar'
+    | '/_app/barberos'
     | '/_app/dashboard'
     | '/_app/disponibilidad'
+    | '/_app/estadisticas'
     | '/_app/historial'
     | '/_app/inicio'
     | '/_app/notificaciones'
     | '/_app/perfil'
     | '/_app/solicitudes'
+    | '/_app/sucursales'
     | '/_app/turnos'
     | '/api/public/hooks/reminders'
   fileRoutesById: FileRoutesById
@@ -227,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTurnosRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/sucursales': {
+      id: '/_app/sucursales'
+      path: '/sucursales'
+      fullPath: '/sucursales'
+      preLoaderRoute: typeof AppSucursalesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/solicitudes': {
       id: '/_app/solicitudes'
       path: '/solicitudes'
@@ -262,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHistorialRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/estadisticas': {
+      id: '/_app/estadisticas'
+      path: '/estadisticas'
+      fullPath: '/estadisticas'
+      preLoaderRoute: typeof AppEstadisticasRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/disponibilidad': {
       id: '/_app/disponibilidad'
       path: '/disponibilidad'
@@ -274,6 +324,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/barberos': {
+      id: '/_app/barberos'
+      path: '/barberos'
+      fullPath: '/barberos'
+      preLoaderRoute: typeof AppBarberosRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/agendar': {
@@ -303,26 +360,32 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAgendaRoute: typeof AppAgendaRoute
   AppAgendarRoute: typeof AppAgendarRoute
+  AppBarberosRoute: typeof AppBarberosRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppDisponibilidadRoute: typeof AppDisponibilidadRoute
+  AppEstadisticasRoute: typeof AppEstadisticasRoute
   AppHistorialRoute: typeof AppHistorialRoute
   AppInicioRoute: typeof AppInicioRoute
   AppNotificacionesRoute: typeof AppNotificacionesRoute
   AppPerfilRoute: typeof AppPerfilRoute
   AppSolicitudesRoute: typeof AppSolicitudesRoute
+  AppSucursalesRoute: typeof AppSucursalesRoute
   AppTurnosRoute: typeof AppTurnosRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAgendaRoute: AppAgendaRoute,
   AppAgendarRoute: AppAgendarRoute,
+  AppBarberosRoute: AppBarberosRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppDisponibilidadRoute: AppDisponibilidadRoute,
+  AppEstadisticasRoute: AppEstadisticasRoute,
   AppHistorialRoute: AppHistorialRoute,
   AppInicioRoute: AppInicioRoute,
   AppNotificacionesRoute: AppNotificacionesRoute,
   AppPerfilRoute: AppPerfilRoute,
   AppSolicitudesRoute: AppSolicitudesRoute,
+  AppSucursalesRoute: AppSucursalesRoute,
   AppTurnosRoute: AppTurnosRoute,
 }
 
@@ -337,13 +400,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

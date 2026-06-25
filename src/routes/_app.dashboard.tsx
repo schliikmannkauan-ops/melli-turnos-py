@@ -4,13 +4,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { AppShell } from "@/components/AppShell";
 import { Card } from "@/components/ui/card";
-import { formatTime } from "@/lib/format";
-import { Inbox, Scissors } from "lucide-react";
+import { formatTime, formatGs } from "@/lib/format";
+import { Inbox, Scissors, Users, Building2, CalendarCheck, Clock, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/_app/dashboard")({
   ssr: false,
-  component: BarberDash,
+  component: DashboardRouter,
 });
+
+function DashboardRouter() {
+  const { role } = useAuth();
+  if (role === "dueno") return <OwnerDash />;
+  return <BarberDash />;
+}
+
+/* ---------------- BARBER ---------------- */
 
 function BarberDash() {
   const { user } = useAuth();
@@ -124,5 +132,123 @@ function BarberDash() {
         )}
       </section>
     </AppShell>
+  );
+}
+
+/* ---------------- OWNER ---------------- */
+
+function OwnerDash() {
+  const today = new Date();
+  const start = new Date(today); start.setHours(0,0,0,0);
+  const end = new Date(today); end.setHours(23,59,59,999);
+  const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  const { data: counts } = useQuery({
+    queryKey: ["owner-counts", start.toISOString()],
+    queryFn: async () => {
+      const [locs, barbs, todayAppts, pending, monthRevenue] = await Promise.all([
+        supabase.from("locations").select("*", { count: "exact", head: true }),
+        supabase.from("barbers").select("*", { count: "exact", head: true }).eq("is_active", true),
+        supabase.from("appointments").select("*", { count: "exact", head: true })
+          .gte("scheduled_at", start.toISOString()).lte("scheduled_at", end.toISOString())
+          .in("status", ["confirmado", "completado"]),
+        supabase.from("appointments").select("*", { count: "exact", head: true }).eq("status", "pendiente"),
+        supabase.from("appointments").select("services(price_gs)")
+          .eq("status", "completado")
+          .gte("scheduled_at", monthStart.toISOString()),
+      ]);
+      const revenue = (monthRevenue.data ?? []).reduce(
+        (sum, r: any) => sum + (r.services?.price_gs ?? 0), 0,
+      );
+      return {
+        locations: locs.count ?? 0,
+        barbers: barbs.count ?? 0,
+        today: todayAppts.count ?? 0,
+        pending: pending.count ?? 0,
+        revenue,
+      };
+    },
+  });
+
+  const { data: locBreakdown } = useQuery({
+    queryKey: ["owner-loc-breakdown", start.toISOString()],
+    queryFn: async () => {
+      const { data: locs } = await supabase.from("locations").select("id, name").order("name");
+      if (!locs) return [];
+      const out = await Promise.all(
+        locs.map(async (l) => {
+          const { count } = await supabase
+            .from("appointments")
+            .select("*", { count: "exact", head: true })
+            .eq("location_id", l.id)
+            .gte("scheduled_at", start.toISOString())
+            .lte("scheduled_at", end.toISOString())
+            .in("status", ["confirmado", "completado"]);
+          return { id: l.id, name: l.name, today: count ?? 0 };
+        }),
+      );
+      return out;
+    },
+  });
+
+  return (
+    <AppShell title="Panel del Dueño">
+      <div className="mb-4">
+        <h2 className="font-display text-2xl">Resumen general</h2>
+        <p className="text-sm text-muted-foreground">Ambas sucursales en un vistazo</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Stat icon={CalendarCheck} label="Turnos hoy" value={counts?.today ?? 0} />
+        <Stat icon={Clock} label="Pendientes" value={counts?.pending ?? 0} />
+        <Stat icon={Users} label="Barberos activos" value={counts?.barbers ?? 0} />
+        <Stat icon={Building2} label="Sucursales" value={counts?.locations ?? 0} />
+      </div>
+
+      <Card className="p-4 mt-4 bg-brand border-brand">
+        <p className="text-xs font-semibold text-ink/70 uppercase tracking-wide">Ingresos del mes</p>
+        <p className="font-display text-3xl text-ink mt-1">{formatGs(counts?.revenue ?? 0)}</p>
+        <p className="text-xs text-ink/70 mt-1">Turnos completados desde el 1°</p>
+      </Card>
+
+      <section className="mt-6">
+        <h3 className="font-display text-lg mb-2">Hoy por sucursal</h3>
+        <div className="grid gap-2">
+          {(locBreakdown ?? []).map((l) => (
+            <Card key={l.id} className="p-4 flex items-center gap-3">
+              <Building2 className="size-5 text-leaf" />
+              <p className="flex-1 font-medium">{l.name}</p>
+              <span className="font-display text-2xl">{l.today}</span>
+            </Card>
+          ))}
+          {locBreakdown && locBreakdown.length === 0 && (
+            <Card className="p-6 text-center text-sm text-muted-foreground">Aún no hay sucursales cargadas.</Card>
+          )}
+        </div>
+      </section>
+
+      <section className="mt-6 grid gap-2">
+        <Link to="/barberos"><Card className="p-4 flex items-center gap-3 hover:border-brand transition">
+          <Users className="size-5 text-ink" />
+          <p className="flex-1 font-medium">Gestionar barberos</p>
+          <span className="text-xs text-muted-foreground">→</span>
+        </Card></Link>
+        <Link to="/estadisticas"><Card className="p-4 flex items-center gap-3 hover:border-brand transition">
+          <BarChart3 className="size-5 text-ink" />
+          <p className="flex-1 font-medium">Ver estadísticas</p>
+          <span className="text-xs text-muted-foreground">→</span>
+        </Card></Link>
+      </section>
+    </AppShell>
+  );
+}
+
+function Stat({ icon: Icon, label, value }: { icon: any; label: string; value: number }) {
+  return (
+    <Card className="p-4">
+      <Icon className="size-5 text-leaf mb-2" />
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="font-display text-2xl mt-1">{value}</p>
+    </Card>
   );
 }
