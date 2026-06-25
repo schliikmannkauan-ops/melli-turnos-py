@@ -99,34 +99,6 @@ function AuthPage() {
       </div>
 
       <div className="flex-1 p-5 max-w-md w-full mx-auto">
-        {session && (
-          <Card className="p-4 mb-4 bg-brand/10 border-brand">
-            <p className="text-sm font-semibold">Ya estás conectado como</p>
-            <p className="text-xs text-muted-foreground font-mono truncate">{session.user.email}</p>
-            <div className="flex gap-2 mt-3">
-              <Button
-                size="sm"
-                className="flex-1 bg-ink text-brand hover:bg-ink/90"
-                onClick={() =>
-                  navigate({ to: role === "cliente" ? "/inicio" : "/dashboard", replace: true })
-                }
-              >
-                Ir al panel
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="flex-1"
-                onClick={async () => {
-                  await signOut();
-                  toast.success("Sesión cerrada");
-                }}
-              >
-                Cerrar sesión
-              </Button>
-            </div>
-          </Card>
-        )}
         <Card className="p-5">
           <div className="flex gap-2 mb-5">
             <button
