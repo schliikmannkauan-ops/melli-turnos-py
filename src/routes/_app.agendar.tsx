@@ -110,8 +110,8 @@ function AgendarPage() {
           const conflict = used.some((u) => !(m + dur <= u.start || m >= u.end));
           if (conflict) continue;
           // also exclude past times today
-          const slotDate = new Date(date);
-          slotDate.setHours(Math.floor(m / 60), m % 60, 0, 0);
+          const [yy, mo, dd] = date.split("-").map(Number);
+          const slotDate = new Date(yy, mo - 1, dd, Math.floor(m / 60), m % 60, 0, 0);
           if (slotDate.getTime() <= Date.now()) continue;
           const hh = String(Math.floor(m / 60)).padStart(2, "0");
           const mm = String(m % 60).padStart(2, "0");
