@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { mode } = Route.useSearch();
   const navigate = useNavigate();
-  const { session, role, refresh, signOut } = useAuth();
+  const { session, role, refresh } = useAuth();
   const [isRegister, setIsRegister] = useState(mode === "register");
   const [loading, setLoading] = useState(false);
   const [seeding, setSeeding] = useState(false);
@@ -37,8 +37,14 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
 
-  // Note: no auto-redirect when already signed in. Show a panel instead so the user
-  // can either continue to their dashboard or sign out to use a different account.
+  useEffect(() => {
+    if (session && role) {
+      navigate({
+        to: role === "cliente" ? "/inicio" : "/dashboard",
+        replace: true,
+      });
+    }
+  }, [session, role, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -93,34 +99,6 @@ function AuthPage() {
       </div>
 
       <div className="flex-1 p-5 max-w-md w-full mx-auto">
-        {session && (
-          <Card className="p-4 mb-4 bg-brand/10 border-brand">
-            <p className="text-sm font-semibold">Ya estás conectado como</p>
-            <p className="text-xs text-muted-foreground font-mono truncate">{session.user.email}</p>
-            <div className="flex gap-2 mt-3">
-              <Button
-                size="sm"
-                className="flex-1 bg-ink text-brand hover:bg-ink/90"
-                onClick={() =>
-                  navigate({ to: role === "cliente" ? "/inicio" : "/dashboard", replace: true })
-                }
-              >
-                Ir al panel
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="flex-1"
-                onClick={async () => {
-                  await signOut();
-                  toast.success("Sesión cerrada");
-                }}
-              >
-                Cerrar sesión
-              </Button>
-            </div>
-          </Card>
-        )}
         <Card className="p-5">
           <div className="flex gap-2 mb-5">
             <button
