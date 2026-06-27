@@ -8,7 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatDateTimeAR } from "@/lib/format";
 import { toast } from "sonner";
-import { Inbox, ImageIcon, Check, X } from "lucide-react";
+import { ImageIcon, Check, X, CheckCircle } from "lucide-react";
+import { EmptyState } from "@/components/EmptyState";
 
 export const Route = createFileRoute("/_app/solicitudes")({
   ssr: false,
@@ -27,7 +28,7 @@ function Solicitudes() {
     enabled: !!user,
   });
 
-  const { data: requests } = useQuery({
+  const requestsQ = useQuery({
     queryKey: ["requests", barber?.id],
     queryFn: async () => {
       const { data } = await supabase
@@ -42,6 +43,7 @@ function Solicitudes() {
     },
     enabled: !!barber,
   });
+  const requests = requestsQ.data;
 
   useEffect(() => {
     if (!barber) return;
