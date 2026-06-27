@@ -9,14 +9,19 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/StatusBadge";
 import { formatDateTimeAR, formatGs, canCancel } from "@/lib/format";
 import { toast } from "sonner";
-import { Calendar } from "lucide-react";
+import { CalendarX } from "lucide-react";
+import { EmptyState } from "@/components/EmptyState";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_app/turnos")({
   ssr: false,
