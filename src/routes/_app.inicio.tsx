@@ -7,7 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/StatusBadge";
 import { formatDateTimeAR } from "@/lib/format";
-import { Plus, Calendar, Scissors } from "lucide-react";
+import { Plus, Scissors, CalendarX } from "lucide-react";
+import { EmptyState } from "@/components/EmptyState";
 
 export const Route = createFileRoute("/_app/inicio")({
   ssr: false,
