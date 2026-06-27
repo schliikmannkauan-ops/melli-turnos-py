@@ -48,7 +48,7 @@ function BarberosPage() {
   });
 
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "demo1234", location_id: "", bio: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", location_id: "", bio: "" });
   const [saving, setSaving] = useState(false);
 
   async function toggleActive(id: string, current: boolean) {
@@ -68,6 +68,9 @@ function BarberosPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.location_id) return toast.error("Elegí una sucursal");
+    if (form.password.length < 8 || !/\d/.test(form.password)) {
+      return toast.error("La contraseña debe tener al menos 8 caracteres y un número");
+    }
     setSaving(true);
     try {
       await createFn({ data: form });
@@ -99,7 +102,7 @@ function BarberosPage() {
               <div><Label>Nombre completo</Label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
               <div><Label>Email</Label><Input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
               <div><Label>Teléfono</Label><Input required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-              <div><Label>Contraseña inicial</Label><Input required minLength={6} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
+              <div><Label>Contraseña inicial</Label><Input required minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
               <div>
                 <Label>Sucursal</Label>
                 <Select value={form.location_id} onValueChange={(v) => setForm({ ...form, location_id: v })}>
