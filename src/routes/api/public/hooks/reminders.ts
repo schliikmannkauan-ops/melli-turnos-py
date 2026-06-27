@@ -1,21 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// Public cron endpoint: inserts reminder notifications for appointments ~1h away.
-// Called by pg_cron every 5 minutes.
+/**
+ * Recordatorios automáticos de turnos (1 hora antes).
+ *
+ * Este endpoint es público (vive bajo /api/public/hooks/) y no requiere autenticación,
+ * por lo que puede ser invocado por un servicio de cron externo.
+ *
+ * Configurá un cron job (por ejemplo en https://cron-job.org) que haga una petición
+ * POST cada 15 minutos a:
+ *
+ *   https://melli-turnos-py.lovable.app/api/public/hooks/reminders
+ *
+ * En cada ejecución:
+ *   1. Busca turnos con status = 'confirmado' y reminder_sent = false cuyo
+ *      scheduled_at esté entre NOW() y NOW() + 1 hora.
+ *   2. Inserta una notificación para el cliente y otra para el barbero.
+ *   3. Marca el turno como reminder_sent = true para no repetir el aviso.
+ */
 export const Route = createFileRoute("/api/public/hooks/reminders")({
   server: {
     handlers: {
       POST: async () => {
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        const now = Date.now();
-        const lo = new Date(now + 55 * 60 * 1000).toISOString();
-        const hi = new Date(now + 65 * 60 * 1000).toISOString();
+        const now = new Date();
+        const lo = now.toISOString();
+        const hi = new Date(now.getTime() + 60 * 60 * 1000).toISOString();
 
         const { data: due, error } = await supabaseAdmin
           .from("appointments")
           .select(
-            "id, client_id, scheduled_at, services(name), barbers(user_id, profiles:profiles!barbers_user_id_profiles_fkey(name))",
+            "id, client_id, scheduled_at, services(name), profiles:profiles!appointments_client_id_profiles_fkey(name), barbers(user_id)",
           )
           .eq("status", "confirmado")
           .eq("reminder_sent", false)
@@ -33,28 +48,28 @@ export const Route = createFileRoute("/api/public/hooks/reminders")({
         const ids: string[] = [];
 
         for (const a of due ?? []) {
-          const when = new Date(a.scheduled_at).toLocaleTimeString("es-PY", {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          const svc = (a as any).services?.name ?? "tu turno";
-          const barberName = (a as any).barbers?.profiles?.name ?? "tu barbero";
+          const svc = (a as any).services?.name ?? "tu servicio";
+          const clientName = (a as any).profiles?.name ?? "un cliente";
           const barberUserId = (a as any).barbers?.user_id;
 
+          // Notificación para el cliente
           notifs.push({
             user_id: a.client_id,
-            title: "Tu turno es en 1 hora ⏰",
-            body: `${svc} a las ${when} con ${barberName}`,
+            title: "⏰ Recordatorio de turno",
+            body: `Tu turno de ${svc} es en 1 hora. ¡No llegues tarde!`,
             type: "recordatorio",
           });
+
+          // Notificación para el barbero
           if (barberUserId) {
             notifs.push({
               user_id: barberUserId,
-              title: "Turno en 1 hora",
-              body: `${svc} a las ${when}`,
+              title: "⏰ Turno en 1 hora",
+              body: `Tenés un turno de ${svc} con ${clientName} en 1 hora.`,
               type: "recordatorio",
             });
           }
+
           ids.push(a.id);
         }
 
@@ -63,9 +78,10 @@ export const Route = createFileRoute("/api/public/hooks/reminders")({
           await supabaseAdmin.from("appointments").update({ reminder_sent: true }).in("id", ids);
         }
 
-        return new Response(JSON.stringify({ processed: ids.length }), {
-          headers: { "content-type": "application/json" },
-        });
+        return new Response(
+          JSON.stringify({ processed: ids.length, notifications: notifs.length }),
+          { headers: { "content-type": "application/json" } },
+        );
       },
     },
   },
