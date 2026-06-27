@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { AppShell } from "@/components/AppShell";
 import { Card } from "@/components/ui/card";
 import { Bell } from "lucide-react";
+import { EmptyState } from "@/components/EmptyState";
 
 export const Route = createFileRoute("/_app/notificaciones")({
   ssr: false,
@@ -16,7 +17,7 @@ function Notificaciones() {
   const { user } = useAuth();
   const qc = useQueryClient();
 
-  const { data } = useQuery({
+  const notifsQ = useQuery({
     queryKey: ["notifs", user?.id],
     queryFn: async () => {
       const { data } = await supabase
@@ -29,6 +30,7 @@ function Notificaciones() {
     },
     enabled: !!user,
   });
+  const data = notifsQ.data;
 
   useEffect(() => {
     if (!user) return;
@@ -48,7 +50,7 @@ function Notificaciones() {
   }, [user, qc]);
 
   return (
-    <AppShell title="Notificaciones">
+    <AppShell title="Notificaciones" isFetching={notifsQ.isFetching}>
       {data && data.length > 0 ? (
         <div className="grid gap-2">
           {data.map((n) => (
