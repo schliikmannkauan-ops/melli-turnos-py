@@ -11,7 +11,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatGs } from "@/lib/format";
 import { toast } from "sonner";
-import { ChevronLeft, MapPin, Scissors, User as UserIcon, Calendar as CalIcon, Loader2, Upload, Check } from "lucide-react";
+import {
+  ChevronLeft,
+  MapPin,
+  Scissors,
+  User as UserIcon,
+  Calendar as CalIcon,
+  Loader2,
+  Upload,
+  Check,
+  Sparkles,
+  Zap,
+  Droplets,
+  Wind,
+  Clock,
+  Sword,
+  Brush,
+} from "lucide-react";
+
+function getServiceIcon(name: string) {
+  const n = name.toLowerCase();
+  if (n.includes("corte") && n.includes("barba")) {
+    return (
+      <span className="flex items-center gap-0.5">
+        <Scissors className="size-5 text-ink" />
+        <Sword className="size-5 text-ink" />
+      </span>
+    );
+  }
+  if (n.includes("barba") && n.includes("expr")) return <Zap className="size-7 text-ink" />;
+  if (n.includes("barba")) return <Sword className="size-7 text-ink" />;
+  if (n.includes("luces") || n.includes("luz")) return <Sparkles className="size-7 text-ink" />;
+  if (n.includes("hidrat")) return <Droplets className="size-7 text-ink" />;
+  if (n.includes("alisad")) return <Wind className="size-7 text-ink" />;
+  if (n.includes("máquina") || n.includes("maquina") || n.includes("peine"))
+    return <Brush className="size-7 text-ink" />;
+  if (n.includes("corte")) return <Scissors className="size-7 text-ink" />;
+  return <Scissors className="size-7 text-ink" />;
+}
 
 export const Route = createFileRoute("/_app/agendar")({
   ssr: false,
