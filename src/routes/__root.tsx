@@ -88,9 +88,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/023b7b16-853b-4e02-8823-173bf2f916cf" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "Melli Turnos" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.json" },
+      { rel: "apple-touch-icon", href: "/icons/icon-192.png" },
+      { rel: "icon", type: "image/png", sizes: "192x192", href: "/icons/icon-192.png" },
+      { rel: "icon", type: "image/png", sizes: "512x512", href: "/icons/icon-512.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
