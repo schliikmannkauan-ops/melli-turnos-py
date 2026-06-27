@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 import { BottomNav } from "@/components/BottomNav";
 import { useAuth } from "@/hooks/use-auth";
@@ -9,11 +10,13 @@ export function AppShell({
   title,
   right,
   hideNav,
+  isFetching,
 }: {
   children: ReactNode;
   title?: string;
   right?: ReactNode;
   hideNav?: boolean;
+  isFetching?: boolean;
 }) {
   const { role } = useAuth();
   return (
@@ -30,9 +33,19 @@ export function AppShell({
           </div>
           {right}
         </div>
+        <div className="h-0.5 bg-brand/40 overflow-hidden" aria-hidden="true">
+          {isFetching && (
+            <div className="h-full flex items-center justify-center">
+              <Loader2 className="size-3 text-ink animate-spin -mt-0.5" />
+            </div>
+          )}
+        </div>
       </header>
-      <main className="flex-1 max-w-md w-full mx-auto px-4 pt-4 pb-28">{children}</main>
+      <main key={title} className="flex-1 max-w-md w-full mx-auto px-4 pt-4 pb-28 animate-fade-in">
+        {children}
+      </main>
       {!hideNav && role && <BottomNav role={role} />}
     </div>
   );
 }
+
