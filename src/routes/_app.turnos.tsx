@@ -75,7 +75,7 @@ function MisTurnos() {
   }
 
   return (
-    <AppShell title="Mis turnos">
+    <AppShell title="Mis turnos" isFetching={apptsQ.isFetching}>
       {appts && appts.length > 0 ? (
         <div className="grid gap-3">
           {appts.map((a) => (
@@ -93,27 +93,30 @@ function MisTurnos() {
               <div className="flex items-center justify-between pt-3 border-t">
                 <span className="text-sm font-medium text-leaf">{formatGs((a as any).services?.price_gs ?? 0)}</span>
                 {(a.status === "pendiente" || a.status === "confirmado") && (
-                  <Dialog>
-                    <DialogTrigger asChild>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
                       <Button size="sm" variant="outline" className="border-destructive/40 text-destructive hover:bg-destructive/10">
                         Cancelar turno
                       </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>¿Cancelar este turno?</DialogTitle>
-                      </DialogHeader>
-                      <p className="text-sm text-muted-foreground">
-                        Vas a cancelar tu turno del {formatDateTimeAR(a.scheduled_at)}.
-                      </p>
-                      <Button
-                        onClick={() => cancel(a.id, a.scheduled_at)}
-                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                      >
-                        Sí, cancelar
-                      </Button>
-                    </DialogContent>
-                  </Dialog>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>¿Cancelar este turno?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Vas a cancelar tu turno del {formatDateTimeAR(a.scheduled_at)}.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="mt-0">No, volver</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => cancel(a.id, a.scheduled_at)}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Sí, cancelar
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 )}
               </div>
               {a.description && (
@@ -123,10 +126,11 @@ function MisTurnos() {
           ))}
         </div>
       ) : (
-        <Card className="p-8 text-center text-muted-foreground">
-          <Calendar className="size-10 mx-auto mb-3 opacity-50" />
-          <p className="text-sm">Aún no tenés turnos agendados.</p>
-        </Card>
+        <EmptyState
+          icon={CalendarX}
+          title="No tenés turnos"
+          subtitle="Usá el botón + para agendar"
+        />
       )}
     </AppShell>
   );
