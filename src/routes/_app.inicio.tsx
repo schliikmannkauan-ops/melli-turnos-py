@@ -7,7 +7,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/StatusBadge";
 import { formatDateTimeAR } from "@/lib/format";
-import { Plus, Calendar, Scissors } from "lucide-react";
+import { Plus, Scissors, CalendarX } from "lucide-react";
+import { EmptyState } from "@/components/EmptyState";
 
 export const Route = createFileRoute("/_app/inicio")({
   ssr: false,
@@ -26,7 +27,7 @@ function HomeCliente() {
     enabled: !!user,
   });
 
-  const { data: upcoming } = useQuery({
+  const upcomingQ = useQuery({
     queryKey: ["upcoming", user?.id],
     queryFn: async () => {
       const { data } = await supabase
@@ -41,8 +42,9 @@ function HomeCliente() {
     },
     enabled: !!user,
   });
+  const upcoming = upcomingQ.data;
 
-  const { data: recent } = useQuery({
+  const recentQ = useQuery({
     queryKey: ["recent", user?.id],
     queryFn: async () => {
       const { data } = await supabase
@@ -55,9 +57,10 @@ function HomeCliente() {
     },
     enabled: !!user,
   });
+  const recent = recentQ.data;
 
   return (
-    <AppShell title="Inicio">
+    <AppShell title="Inicio" isFetching={upcomingQ.isFetching || recentQ.isFetching}>
       <div className="mb-5">
         <h2 className="font-display text-2xl">¡Hola, {profile?.name || "amigo"}! 👋</h2>
         <p className="text-sm text-muted-foreground mt-1">¿Listo para tu próximo corte?</p>
@@ -90,10 +93,11 @@ function HomeCliente() {
             </div>
           </Card>
         ) : (
-          <Card className="p-5 text-center text-sm text-muted-foreground">
-            <Calendar className="size-7 mx-auto mb-2 opacity-50" />
-            No tenés turnos próximos
-          </Card>
+          <EmptyState
+            icon={CalendarX}
+            title="Sin turnos próximos"
+            subtitle="¡Agendá tu primer turno!"
+          />
         )}
       </section>
 

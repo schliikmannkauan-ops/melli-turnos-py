@@ -8,7 +8,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatDateTimeAR } from "@/lib/format";
 import { toast } from "sonner";
-import { Inbox, ImageIcon, Check, X } from "lucide-react";
+import { ImageIcon, Check, X, CheckCircle } from "lucide-react";
+import { EmptyState } from "@/components/EmptyState";
 
 export const Route = createFileRoute("/_app/solicitudes")({
   ssr: false,
@@ -27,7 +28,7 @@ function Solicitudes() {
     enabled: !!user,
   });
 
-  const { data: requests } = useQuery({
+  const requestsQ = useQuery({
     queryKey: ["requests", barber?.id],
     queryFn: async () => {
       const { data } = await supabase
@@ -42,6 +43,7 @@ function Solicitudes() {
     },
     enabled: !!barber,
   });
+  const requests = requestsQ.data;
 
   useEffect(() => {
     if (!barber) return;
@@ -77,13 +79,13 @@ function Solicitudes() {
     const { error } = await supabase.from("appointments").update({ status }).eq("id", id);
     if (error) toast.error(error.message);
     else {
-      toast.success(status === "confirmado" ? "Turno confirmado" : "Turno rechazado");
+      toast.success(status === "confirmado" ? "✅ Turno confirmado" : "❌ Turno rechazado");
       qc.invalidateQueries({ queryKey: ["requests"] });
     }
   }
 
   return (
-    <AppShell title="Solicitudes">
+    <AppShell title="Solicitudes" isFetching={requestsQ.isFetching}>
       {requests && requests.length > 0 ? (
         <div className="grid gap-3">
           {requests.map((r) => (
@@ -124,10 +126,11 @@ function Solicitudes() {
           ))}
         </div>
       ) : (
-        <Card className="p-8 text-center text-muted-foreground">
-          <Inbox className="size-10 mx-auto mb-3 opacity-50" />
-          <p className="text-sm">No tenés solicitudes pendientes.</p>
-        </Card>
+        <EmptyState
+          icon={CheckCircle}
+          title="Todo al día"
+          subtitle="No hay solicitudes pendientes"
+        />
       )}
     </AppShell>
   );
