@@ -11,7 +11,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatGs } from "@/lib/format";
 import { toast } from "sonner";
-import { ChevronLeft, MapPin, Scissors, User as UserIcon, Calendar as CalIcon, Loader2, Upload, Check } from "lucide-react";
+import {
+  ChevronLeft,
+  MapPin,
+  Scissors,
+  User as UserIcon,
+  Calendar as CalIcon,
+  Loader2,
+  Upload,
+  Check,
+  Sparkles,
+  Zap,
+  Droplets,
+  Wind,
+  Clock,
+  Sword,
+  Brush,
+} from "lucide-react";
+
+function getServiceIcon(name: string) {
+  const n = name.toLowerCase();
+  if (n.includes("corte") && n.includes("barba")) {
+    return (
+      <span className="flex items-center gap-0.5">
+        <Scissors className="size-5 text-ink" />
+        <Sword className="size-5 text-ink" />
+      </span>
+    );
+  }
+  if (n.includes("barba") && n.includes("expr")) return <Zap className="size-7 text-ink" />;
+  if (n.includes("barba")) return <Sword className="size-7 text-ink" />;
+  if (n.includes("luces") || n.includes("luz")) return <Sparkles className="size-7 text-ink" />;
+  if (n.includes("hidrat")) return <Droplets className="size-7 text-ink" />;
+  if (n.includes("alisad")) return <Wind className="size-7 text-ink" />;
+  if (n.includes("máquina") || n.includes("maquina") || n.includes("peine"))
+    return <Brush className="size-7 text-ink" />;
+  if (n.includes("corte")) return <Scissors className="size-7 text-ink" />;
+  return <Scissors className="size-7 text-ink" />;
+}
 
 export const Route = createFileRoute("/_app/agendar")({
   ssr: false,
@@ -225,26 +262,42 @@ function AgendarPage() {
         <div>
           <h2 className="font-display text-xl mb-1">Elegí el servicio</h2>
           <p className="text-sm text-muted-foreground mb-4">{location?.name}</p>
-          <div className="grid gap-2">
-            {services?.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => {
-                  setServiceId(s.id);
-                  setStep(3);
-                }}
-                className={`brand-card p-4 text-left flex items-center gap-3 hover:border-brand transition ${serviceId === s.id ? "border-brand" : ""}`}
-              >
-                <div className="size-10 rounded-full bg-brand/15 flex items-center justify-center shrink-0">
-                  <Scissors className="size-5 text-ink" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold">{s.name}</p>
-                  <p className="text-xs text-muted-foreground">{s.duration_minutes} min</p>
-                </div>
-                <p className="font-semibold text-leaf">{formatGs(s.price_gs)}</p>
-              </button>
-            ))}
+          <div className="grid gap-3">
+            {services?.map((s) => {
+              const selected = serviceId === s.id;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => {
+                    setServiceId(s.id);
+                    setStep(3);
+                  }}
+                  className={`brand-card p-4 text-left flex items-center gap-4 transition relative ${
+                    selected ? "border-brand border-2 shadow-md" : "hover:border-brand"
+                  }`}
+                >
+                  <div
+                    className="size-14 rounded-full flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: "rgba(245, 197, 0, 0.2)" }}
+                  >
+                    {getServiceIcon(s.name)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-base">{s.name}</p>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                      <Clock className="size-3.5" />
+                      {s.duration_minutes} min
+                    </p>
+                  </div>
+                  <p className="font-bold text-leaf">{formatGs(s.price_gs)}</p>
+                  {selected && (
+                    <div className="absolute top-2 right-2 size-5 rounded-full bg-brand flex items-center justify-center">
+                      <Check className="size-3.5 text-ink" strokeWidth={3} />
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
