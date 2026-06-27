@@ -6,6 +6,7 @@ import { AppShell } from "@/components/AppShell";
 import { Card } from "@/components/ui/card";
 import { formatDateTimeAR, formatGs } from "@/lib/format";
 import { Clock } from "lucide-react";
+import { EmptyState } from "@/components/EmptyState";
 
 export const Route = createFileRoute("/_app/historial")({
   ssr: false,
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/_app/historial")({
 
 function Historial() {
   const { user } = useAuth();
-  const { data } = useQuery({
+  const histQ = useQuery({
     queryKey: ["historial", user?.id],
     queryFn: async () => {
       const { data } = await supabase
@@ -29,9 +30,10 @@ function Historial() {
     },
     enabled: !!user,
   });
+  const data = histQ.data;
 
   return (
-    <AppShell title="Mi historial">
+    <AppShell title="Mi historial" isFetching={histQ.isFetching}>
       {data && data.length > 0 ? (
         <div className="grid gap-3">
           {data.map((a) => (
@@ -45,10 +47,11 @@ function Historial() {
           ))}
         </div>
       ) : (
-        <Card className="p-8 text-center text-muted-foreground">
-          <Clock className="size-10 mx-auto mb-3 opacity-50" />
-          <p className="text-sm">Sin turnos completados todavía.</p>
-        </Card>
+        <EmptyState
+          icon={Clock}
+          title="Sin historial todavía"
+          subtitle="Tus cortes completados aparecerán acá"
+        />
       )}
     </AppShell>
   );
