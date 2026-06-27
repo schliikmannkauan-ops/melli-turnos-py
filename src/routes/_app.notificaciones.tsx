@@ -69,10 +69,11 @@ function Notificaciones() {
           ))}
         </div>
       ) : (
-        <Card className="p-8 text-center text-muted-foreground">
-          <Bell className="size-10 mx-auto mb-3 opacity-50" />
-          <p className="text-sm">No tenés notificaciones todavía.</p>
-        </Card>
+        <EmptyState
+          icon={Bell}
+          title="Sin notificaciones"
+          subtitle="Te avisaremos cuando haya novedades"
+        />
       )}
     </AppShell>
   );
