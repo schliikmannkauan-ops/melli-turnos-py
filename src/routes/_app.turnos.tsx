@@ -32,7 +32,7 @@ function MisTurnos() {
   const { user } = useAuth();
   const qc = useQueryClient();
 
-  const { data: appts } = useQuery({
+  const apptsQ = useQuery({
     queryKey: ["mis-turnos", user?.id],
     queryFn: async () => {
       const { data } = await supabase
@@ -46,6 +46,7 @@ function MisTurnos() {
     },
     enabled: !!user,
   });
+  const appts = apptsQ.data;
 
   useEffect(() => {
     if (!user) return;
