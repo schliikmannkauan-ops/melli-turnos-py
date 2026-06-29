@@ -66,6 +66,17 @@ function BarberosPage() {
     qc.invalidateQueries({ queryKey: ["barbers-all"] });
   }
 
+  async function deleteBarber(userId: string, name: string) {
+    if (!confirm(`¿Eliminar al barbero ${name}? Esta acción no se puede deshacer.`)) return;
+    try {
+      await deleteFn({ data: { user_id: userId } });
+      toast.success("Barbero eliminado");
+      qc.invalidateQueries({ queryKey: ["barbers-all"] });
+    } catch (err: any) {
+      toast.error(err.message || "No se pudo eliminar");
+    }
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.location_id) return toast.error("Elegí una sucursal");
