@@ -26,6 +26,7 @@ function BarberosPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const createFn = useServerFn(createBarberAccount);
+  const deleteFn = useServerFn(deleteBarberAccount);
 
   useEffect(() => {
     if (role && role !== "dueno") navigate({ to: "/", replace: true });
