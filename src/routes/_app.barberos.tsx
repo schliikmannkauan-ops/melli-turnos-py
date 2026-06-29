@@ -114,7 +114,7 @@ function BarberosPage() {
               <div><Label>Nombre completo</Label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
               <div><Label>Email</Label><Input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
               <div><Label>Teléfono</Label><Input required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-              <div><Label>Contraseña inicial</Label><Input required minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
+              <div><Label>Contraseña inicial</Label><Input required minLength={8} placeholder="Mínimo 8 caracteres con 1 número" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
               <div>
                 <Label>Sucursal</Label>
                 <Select value={form.location_id} onValueChange={(v) => setForm({ ...form, location_id: v })}>
