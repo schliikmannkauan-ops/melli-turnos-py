@@ -28,8 +28,6 @@ function AuthPage() {
   const { session, role, refresh } = useAuth();
   const [isRegister, setIsRegister] = useState(mode === "register");
   const [loading, setLoading] = useState(false);
-  const [seeding, setSeeding] = useState(false);
-  const seed = useServerFn(seedDemoUsers);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
