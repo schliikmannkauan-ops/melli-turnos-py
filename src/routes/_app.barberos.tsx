@@ -164,6 +164,14 @@ function BarberosPage() {
                 </Select>
               </div>
               {b.bio && <p className="text-xs text-muted-foreground mt-2 italic">"{b.bio}"</p>}
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => deleteBarber(b.user_id, b.profiles?.name || "este barbero")}
+                className="text-destructive hover:bg-destructive/10 mt-2 w-full"
+              >
+                <Trash2 className="size-4 mr-1" /> Eliminar barbero
+              </Button>
             </Card>
           ))}
           {barbers && barbers.length === 0 && (
