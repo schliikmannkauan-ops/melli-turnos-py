@@ -71,20 +71,6 @@ function AuthPage() {
     }
   }
 
-  async function fillDemo(em: string) {
-    setSeeding(true);
-    try {
-      await seed();
-      setEmail(em);
-      setPassword("demo1234");
-      setIsRegister(false);
-      toast.success("Cuentas demo listas. Tocá Iniciar sesión.");
-    } catch (err: any) {
-      toast.error(err.message || "No se pudo preparar la demo");
-    } finally {
-      setSeeding(false);
-    }
-  }
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
