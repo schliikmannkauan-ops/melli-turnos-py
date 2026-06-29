@@ -86,9 +86,9 @@ function BarberosPage() {
     setSaving(true);
     try {
       await createFn({ data: form });
-      toast.success("Barbero creado");
+      toast.success(`✅ Barbero creado. Email: ${form.email} | Contraseña: ${form.password}`);
       setOpen(false);
-      setForm({ name: "", email: "", phone: "", password: "demo1234", location_id: "", bio: "" });
+      setForm({ name: "", email: "", phone: "", password: "", location_id: "", bio: "" });
       qc.invalidateQueries({ queryKey: ["barbers-all"] });
     } catch (err: any) {
       toast.error(err.message || "No se pudo crear");
