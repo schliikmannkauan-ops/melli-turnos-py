@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { seedDemoUsers } from "@/lib/seed.functions";
 import { Loader2 } from "lucide-react";
 
 const searchSchema = z.object({
