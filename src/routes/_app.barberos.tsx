@@ -13,8 +13,8 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { createBarberAccount } from "@/lib/owner.functions";
-import { Loader2, Plus, Building2 } from "lucide-react";
+import { createBarberAccount, deleteBarberAccount } from "@/lib/owner.functions";
+import { Loader2, Plus, Building2, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_app/barberos")({
   ssr: false,
