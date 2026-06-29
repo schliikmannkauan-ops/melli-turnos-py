@@ -13,8 +13,8 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { createBarberAccount } from "@/lib/owner.functions";
-import { Loader2, Plus, Building2 } from "lucide-react";
+import { createBarberAccount, deleteBarberAccount } from "@/lib/owner.functions";
+import { Loader2, Plus, Building2, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_app/barberos")({
   ssr: false,
@@ -26,6 +26,7 @@ function BarberosPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const createFn = useServerFn(createBarberAccount);
+  const deleteFn = useServerFn(deleteBarberAccount);
 
   useEffect(() => {
     if (role && role !== "dueno") navigate({ to: "/", replace: true });
@@ -65,6 +66,17 @@ function BarberosPage() {
     qc.invalidateQueries({ queryKey: ["barbers-all"] });
   }
 
+  async function deleteBarber(userId: string, name: string) {
+    if (!confirm(`¿Eliminar al barbero ${name}? Esta acción no se puede deshacer.`)) return;
+    try {
+      await deleteFn({ data: { user_id: userId } });
+      toast.success("Barbero eliminado");
+      qc.invalidateQueries({ queryKey: ["barbers-all"] });
+    } catch (err: any) {
+      toast.error(err.message || "No se pudo eliminar");
+    }
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.location_id) return toast.error("Elegí una sucursal");
@@ -74,9 +86,9 @@ function BarberosPage() {
     setSaving(true);
     try {
       await createFn({ data: form });
-      toast.success("Barbero creado");
+      toast.success(`✅ Barbero creado. Email: ${form.email} | Contraseña: ${form.password}`);
       setOpen(false);
-      setForm({ name: "", email: "", phone: "", password: "demo1234", location_id: "", bio: "" });
+      setForm({ name: "", email: "", phone: "", password: "", location_id: "", bio: "" });
       qc.invalidateQueries({ queryKey: ["barbers-all"] });
     } catch (err: any) {
       toast.error(err.message || "No se pudo crear");
@@ -102,7 +114,7 @@ function BarberosPage() {
               <div><Label>Nombre completo</Label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
               <div><Label>Email</Label><Input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
               <div><Label>Teléfono</Label><Input required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-              <div><Label>Contraseña inicial</Label><Input required minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
+              <div><Label>Contraseña inicial</Label><Input required minLength={8} placeholder="Mínimo 8 caracteres con 1 número" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></div>
               <div>
                 <Label>Sucursal</Label>
                 <Select value={form.location_id} onValueChange={(v) => setForm({ ...form, location_id: v })}>
@@ -152,6 +164,14 @@ function BarberosPage() {
                 </Select>
               </div>
               {b.bio && <p className="text-xs text-muted-foreground mt-2 italic">"{b.bio}"</p>}
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => deleteBarber(b.user_id, b.profiles?.name || "este barbero")}
+                className="text-destructive hover:bg-destructive/10 mt-2 w-full"
+              >
+                <Trash2 className="size-4 mr-1" /> Eliminar barbero
+              </Button>
             </Card>
           ))}
           {barbers && barbers.length === 0 && (
