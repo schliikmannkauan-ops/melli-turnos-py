@@ -71,7 +71,6 @@ function AuthPage() {
     }
   }
 
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <div className="bg-brand p-6 flex flex-col items-center text-center">
