@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { useServerFn } from "@tanstack/react-start";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { BrandLogo } from "@/components/BrandLogo";
@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { seedDemoUsers } from "@/lib/seed.functions";
 import { Loader2 } from "lucide-react";
 
 const searchSchema = z.object({
@@ -29,8 +28,6 @@ function AuthPage() {
   const { session, role, refresh } = useAuth();
   const [isRegister, setIsRegister] = useState(mode === "register");
   const [loading, setLoading] = useState(false);
-  const [seeding, setSeeding] = useState(false);
-  const seed = useServerFn(seedDemoUsers);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,21 +68,6 @@ function AuthPage() {
       toast.error(err.message || "Algo salió mal");
     } finally {
       setLoading(false);
-    }
-  }
-
-  async function fillDemo(em: string) {
-    setSeeding(true);
-    try {
-      await seed();
-      setEmail(em);
-      setPassword("demo1234");
-      setIsRegister(false);
-      toast.success("Cuentas demo listas. Tocá Iniciar sesión.");
-    } catch (err: any) {
-      toast.error(err.message || "No se pudo preparar la demo");
-    } finally {
-      setSeeding(false);
     }
   }
 
@@ -151,36 +133,7 @@ function AuthPage() {
           </form>
         </Card>
 
-        <Card className="p-4 mt-4 bg-surface-muted">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Cuentas de prueba</p>
-          <p className="text-xs text-muted-foreground mt-1 mb-3">
-            Tocá una para preparar las cuentas demo (contraseña: <span className="font-mono">demo1234</span>).
-          </p>
-          <div className="grid gap-2">
-            <DemoButton emoji="👤" label="Cliente" email="cliente@demo.com" onClick={() => fillDemo("cliente@demo.com")} loading={seeding} />
-            <DemoButton emoji="✂️" label="Barbero" email="barbero@demo.com" onClick={() => fillDemo("barbero@demo.com")} loading={seeding} />
-            <DemoButton emoji="👑" label="Dueño" email="dueno@demo.com" onClick={() => fillDemo("dueno@demo.com")} loading={seeding} />
-          </div>
-        </Card>
       </div>
     </div>
-  );
-}
-
-function DemoButton({ emoji, label, email, onClick, loading }: { emoji: string; label: string; email: string; onClick: () => void; loading: boolean }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={loading}
-      className="flex items-center gap-3 p-3 rounded-md bg-surface border border-border text-left hover:border-brand transition disabled:opacity-60"
-    >
-      <span className="text-xl">{emoji}</span>
-      <div className="flex-1 min-w-0">
-        <div className="text-sm font-semibold">{label}</div>
-        <div className="text-xs text-muted-foreground font-mono truncate">{email}</div>
-      </div>
-      {loading && <Loader2 className="animate-spin size-4" />}
-    </button>
   );
 }
